@@ -10,7 +10,8 @@ def run_test(test_name):
     print(f"\nRunning {test_name}...")
 
     result = subprocess.run(
-        ["python", "code/main.py", input_file, output_file],
+        ["python", "code/main.py"],
+        input=f"{input_file}\n{output_file}\n",
         capture_output=True,
         text=True
     )
