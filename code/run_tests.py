@@ -10,8 +10,7 @@ def run_test(test_name):
     print(f"\nRunning {test_name}...")
 
     result = subprocess.run(
-        ["python", "code/main.py"],
-        input=f"{input_file}\n{output_file}\n",
+        ["python", "mips_decoder.py", input_file, output_file],
         capture_output=True,
         text=True
     )

@@ -1,28 +1,25 @@
-def binary_to_int(b):
-    return int(b,2)
+def binary_to_int(bits):
+    # Convert binary text like "1010" to an integer.
+    return int(bits, 2)
 
-def sign_extend_16(b):
-    val = int(b, 2)
 
-    if b[0] == '1':
-        val -= (1 <<16)
-    return val
+def sign_extend(bits):
+    # Interpret the binary text as a signed two's-complement value.
+    value = int(bits, 2)
+    width = len(bits)
+    if bits[0] == "1":
+        value -= 1 << width
+    return value
 
-def sign_extend_32(b):
-    val = int(b, 2)
 
-    if b[0] == '1':
-        val -= (1 <<32)
-    return val
+def reg_name(index):
+    # Project format uses R0, R1, R2, ... for register names.
+    return f"R{index}"
 
-def reg_name(r):
-    # regs = [
-    #     "R0","AT","V0","V1","A0","A1","A2","A3",
-    #     "T0","T1","T2","T3","T4","T5","T6","T7",
-    #     "S0","S1","S2","S3","S4","S5","S6","S7",
-    #     "T8","T9","K0","K1","GP","SP","FP","RA"
-    # ]
-    return f"R{r}"
 
-def format_bits(b):
-    return b[:6] + " " + b[6:11] + " " + b[11:16] + " " + b[16:21] + " " + b[21:26] + " " + b[26:]
+def format_bits(bits):
+    # Display instruction bits in grouped fields for readability.
+    return (
+        f"{bits[:6]} {bits[6:11]} {bits[11:16]} "
+        f"{bits[16:21]} {bits[21:26]} {bits[26:]}"
+    )
