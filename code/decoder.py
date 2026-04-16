@@ -2,23 +2,23 @@ from utils import binary_to_int, reg_name, sign_extend
 
 
 def format_instruction(opcode, operands=""):
-    # Builds output like "ADD\tR1, R2, R3".
+    # Build output like: ADD<TAB>R1, R2, R3
     if operands:
         return f"{opcode}\t{operands}"
     return opcode
 
 
 def decode_r_type(bits):
-    # R-type fields come from fixed bit slices.
+    # R-type field layout.
     rs = binary_to_int(bits[6:11])
     rt = binary_to_int(bits[11:16])
     rd = binary_to_int(bits[16:21])
     shamt = binary_to_int(bits[21:26])
     funct = binary_to_int(bits[26:32])
 
-    # funct decides which R-type instruction this is.
+    # funct decides which R-type instruction this line is.
     if funct == 0:
-        # All zeros means NOP in this project.
+        # All zeros is NOP, otherwise funct 0 is SLL.
         if rs == 0 and rt == 0 and rd == 0 and shamt == 0:
             return "NOP"
         return format_instruction("SLL", f"{reg_name(rd)}, {reg_name(rt)}, #{shamt}")
@@ -53,14 +53,14 @@ def decode_r_type(bits):
 
 
 def decode_instruction(bits):
-    # First 6 bits are always the main opcode.
+    # First 6 bits are the main opcode.
     opcode = binary_to_int(bits[:6])
 
     # opcode 0 means this is an R-type instruction.
     if opcode == 0:
         return decode_r_type(bits)
 
-    # J-format uses a 26-bit target that gets shifted left by 2.
+    # J uses the 26-bit target shifted left by 2.
     if opcode == 2:
         target = binary_to_int(bits[6:32]) << 2
         return format_instruction("J", str(target))
